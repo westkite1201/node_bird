@@ -1,7 +1,8 @@
-import React, { useState, useCallback, Fragment, memo } from "react";
+import React, { useState, useCallback, Fragment, memo, useEffect } from "react";
 import { Form, Input, Checkbox, Button } from "antd";
-import { useDispatch } from "react-redux";
-import { signUpAction } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 //참고용 지나친 최적화
 const TextInput = memo(({ value, onChange }) => {
   return (
@@ -20,6 +21,7 @@ export const useInput = (initValue = null) => {
 
 const SignUp = () => {
   const dispatch = useDispatch();
+  const { isSigningUp, me } = useSelector(state => state.user);
   const [nick, setNick] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
@@ -28,6 +30,12 @@ const SignUp = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [termError, setTermError] = useState(false);
 
+  useEffect(() => {
+    if (me) {
+      alert("로그인후 메인페이지로 이동합니다. ");
+      Router.push("/");
+    }
+  }, [me && me.id]);
   /* use Callback 같은경우는  [] 안에 이 값이 변경되면 
   다시 재 렌더링 해준다 라는것을 명시해주는것  */
   const onSubmit = useCallback(
@@ -40,7 +48,7 @@ const SignUp = () => {
         return setTermError(true);
       }
 
-      dispatch(signUpAction({ id, password, nick }));
+      dispatch({ type: "SIGN_UP_REQUEST", id, password, nick });
     },
     [password, passwordCheck, term]
   );
@@ -126,7 +134,7 @@ const SignUp = () => {
           )}
         </div>
         <div>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isSigningUp}>
             {" "}
             가입하기{" "}
           </Button>

@@ -3,26 +3,22 @@ const dummyUser = {
   Post: [],
   Followings: [],
   Followers: [],
-  isLoggedIn: false,
-  signUpData: false
+  id: 1
 };
+
 export const initialState = {
-  isLoggedIn: false, //로그인 여부
+  isLoggedIn: false, // 로그인 여부
   isLoggingOut: false, // 로그아웃 시도중
   isLoggingIn: false, // 로그인 시도중
-  logInErrorReason: "",
-  signedUp: false, // 회원가입 성공
+  logInErrorReason: "", // 로그인 실패 사유
+  isSignedUp: false, // 회원가입 성공
   isSigningUp: false, // 회원가입 시도중
-  signedUpErrorReason: "", // 회원가입 실패사유
-  me: null, // 내정보 ,
-  followingList: [], //팔로잉 리스트
-  followerList: [],
-  userInfo: null
+  signUpErrorReason: "", // 회원가입 실패 사유
+  me: null, // 내 정보
+  followingList: [], // 팔로잉 리스트
+  followerList: [], // 팔로워 리스트
+  userInfo: null // 남의 정보
 };
-
-//리덕스 사가는 비동기 요청 처리할떄 사용
-
-//export const SIGN_UP = "SIGN_UP";
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
@@ -58,72 +54,60 @@ export const REMOVE_FOLLOWER_FAILURE = "REMOVE_FOLLOWER_FAILURE";
 
 export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 
-//동적 데이터는 함수
-export const signUpAction = data => {
-  return {
-    type: SIGN_UP,
-    data: data
-  };
-};
-export const signUpSuccess = {
-  type: SIGN_UP_SUCCESS
-};
-
-export const logoutRequestAction = {
-  type: LOG_OUT_REQUEST
-};
-export const loginRequestAction = (data = {
-  type: LOG_IN_REQUEST,
-  data: data
-});
-
-//바로 리턴 가능
-export const signUp = data => ({
-  type: SIGN_UP_REQUEST,
-  data
-});
-
-const reducer = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
-    /* login cycle */
     case LOG_IN_REQUEST: {
       return {
         ...state,
-        isLoggedIn: true,
-        isLoading: true
+        isLoggingIn: true,
+        logInErrorReason: ""
       };
     }
     case LOG_IN_SUCCESS: {
       return {
         ...state,
-        isLoggedIn: false,
-        iisLoggingIn: false,
-        isLoading: false,
-        me: dummyUser
+        isLoggingIn: false,
+        isLoggedIn: true,
+        me: dummyUser,
+        isLoading: false
       };
     }
-
     case LOG_IN_FAILURE: {
       return {
         ...state,
+        isLoggingIn: false,
         isLoggedIn: false,
-        me: null,
-        isLoading: false,
-        logInErrorReason: action.error
+        logInErrorReason: action.error,
+        me: null
       };
     }
-
     case LOG_OUT_REQUEST: {
       return {
         ...state,
         isLoggedIn: false,
-        user: null
+        me: null
       };
     }
     case SIGN_UP_REQUEST: {
       return {
         ...state,
-        signUpData: action.data
+        isSigningUp: true,
+        isSignedUp: false,
+        signUpErrorReason: ""
+      };
+    }
+    case SIGN_UP_SUCCESS: {
+      return {
+        ...state,
+        isSigningUp: false,
+        isSignedUp: true
+      };
+    }
+    case SIGN_UP_FAILURE: {
+      return {
+        ...state,
+        isSigningUp: false,
+        signUpErrorReason: action.error
       };
     }
     default: {
@@ -133,4 +117,3 @@ const reducer = (state = initialState, action) => {
     }
   }
 };
-export default reducer;

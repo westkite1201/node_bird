@@ -8,16 +8,16 @@ const Home = () => {
   const dispatch = useDispatch();
   /* useSelector 사용해서  state 에 접근  */
   // 더 잘게 쪼개도 댐
-  const { user, isLoggedIn } = useSelector(state => state.user);
+  const { me, isLoggedIn } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
-  console.log(user);
+  console.log(me);
   // useEffect(() => {
   //   dispatch(loginRequestAction);
   // }, []);
   return (
     <div>
       {isLoggedIn ? (
-        <div>로그인했습니다. : {user.nickname}</div>
+        <div>로그인했습니다. : {me.nickname}</div>
       ) : (
         <div>로그아웃했습니다.</div>
       )}

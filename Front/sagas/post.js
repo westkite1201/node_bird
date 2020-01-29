@@ -41,6 +41,7 @@ function* addComment(action) {
       }
     });
   } catch (e) {
+    console.log("error ", e);
     yield put({
       type: ADD_COMMENT_FAILURE,
       error: e

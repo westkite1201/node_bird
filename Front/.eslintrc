@@ -19,6 +19,6 @@
   ],
   "plugins": ["import", "react-hooks"],
   "rules": {
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
   }
 }

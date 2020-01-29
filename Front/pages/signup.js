@@ -36,8 +36,11 @@ const SignUp = () => {
       Router.push("/");
     }
   }, [me && me.id]);
+
   /* use Callback 같은경우는  [] 안에 이 값이 변경되면 
-  다시 재 렌더링 해준다 라는것을 명시해주는것  */
+  다시 재 렌더링 해준다 라는것을 명시해주는것
+  useCallBack 같은경우 안에서 쓰는 state들은 [] 명시 
+  */
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
@@ -48,9 +51,16 @@ const SignUp = () => {
         return setTermError(true);
       }
 
-      dispatch({ type: "SIGN_UP_REQUEST", id, password, nick });
+      dispatch({
+        type: "SIGN_UP_REQUEST",
+        data: {
+          userId: id,
+          password: password,
+          nickname: nick
+        }
+      });
     },
-    [password, passwordCheck, term]
+    [id, nick, password, passwordCheck, term]
   );
 
   const onChangeNick = e => {

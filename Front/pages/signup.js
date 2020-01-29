@@ -39,7 +39,7 @@ const SignUp = () => {
 
   /* use Callback 같은경우는  [] 안에 이 값이 변경되면 
   다시 재 렌더링 해준다 라는것을 명시해주는것
-  useCallBack 같은경우 안에서 쓰는 state들은 [] 명시 
+  useCallBack 같은경우 안에서 쓰는 state들은 [] 안에 명시 
   */
   const onSubmit = useCallback(
     e => {
